@@ -1,64 +1,54 @@
 "use strict";
 
-// -----------------------------Global variables
-const gallery = document.querySelector(".gallery");
-let categories = null;
+// !----------------------------- Global variables
+let allWorks = [];
+let allCategories = [];
 
-// -----------------------------API retrieval
+// !----------------------------- Functions
 const getWorks = async () => {
-    const [galleryResponse, categoriesResponse] = await Promise.all([
-        fetch("http://localhost:5678/api/works")
-            .then(res => res.json()),
-        fetch("http://localhost:5678/api/categories")
-            .then(res => res.json())
-    ]);
-
-    const works = galleryResponse;
-    categories = categoriesResponse;
-
-    // Adding work to the gallery
-    createGallery(works);
-    createCategory();
+  await fetch("http://localhost:5678/api/works")
+    .then(res => res.json())
+    .then(data => allWorks = data);
 };
 
-getWorks();
+const getCategories = async () => {
+  await fetch("http://localhost:5678/api/categories")
+    .then(res => res.json())
+    .then(data => allCategories = data);
+};
 
-//------------- Function for creating the gallery 
+const initGallery = () => {
+  createGallery(allWorks);
+};
+
+//!------------- Function for creating the gallery 
 const createGallery = (gallery) => {
-    let portfolio = document.getElementById("portfolio");
+  let portfolio = document.getElementById("portfolio");
 
-    let newGallery = document.createElement("div");
-    newGallery.classList.add("gallery");
+  let newGallery = document.createElement("div");
+  newGallery.classList.add("gallery");
 
-    gallery.forEach((work) => {
-        const figure = document.createElement("figure");
-        const img = document.createElement("img");
-        const figcaption = document.createElement("figcaption");
+  gallery.forEach((work) => {
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const figcaption = document.createElement("figcaption");
 
-        img.src = work.imageUrl;
-        figcaption.textContent = work.title;
+    img.src = work.imageUrl;
+    figcaption.textContent = work.title;
 
-        figure.appendChild(img);
-        figure.appendChild(figcaption);
-        newGallery.appendChild(figure);
-    });
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+    newGallery.appendChild(figure);
+  });
 
-    portfolio.appendChild(newGallery);
+  portfolio.appendChild(newGallery);
 };
 
-//-------------  Creates a category and adds it to the portfolio 
-const createCategory = () => {
-    const filter = document.createElement("div");
-    filter.classList.add("filter");
-    portfolio.appendChild(filter);
+// !----------------------------- General functions
+const fetchData = async () => {
+  await getWorks();
+  await getCategories();
+  initGallery();
+};
 
-    filter.innerHTML =
-        `<div class="button selected" id="0">Tous</div>` +
-        categories
-            .map(
-                (category, index) =>
-                    `<div class="button" id="${index + 1}">${category.name}</div>`
-            )
-            .join("");
-  };
-
+fetchData();

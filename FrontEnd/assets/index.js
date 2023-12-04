@@ -13,7 +13,6 @@ const getWorks = async () => {
       .then(res => res.json())
     ]);
 
-    // Réaffectation des variables globales
     const works = galleryResponse;
     categories = categoriesResponse;
 
@@ -22,3 +21,28 @@ const getWorks = async () => {
 };
 
 getWorks();
+
+//------------- Fonction pour créer la galerie à partir des travaux récupérés
+const createGallery = (gallery) => {
+  let portfolio = document.getElementById("portfolio");
+
+  portfolio.innerHTML = '';
+
+  let newGallery = document.createElement("div");
+  newGallery.classList.add("gallery");
+
+  gallery.forEach((work) => {
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const figcaption = document.createElement("figcaption");
+
+    img.src = work.imageUrl;
+    figcaption.textContent = work.title;
+
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+    newGallery.appendChild(figure);
+  });
+
+  portfolio.appendChild(newGallery);
+};

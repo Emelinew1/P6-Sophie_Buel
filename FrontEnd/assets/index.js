@@ -1,4 +1,7 @@
 "use strict";
+// !----------------------------- Constants
+const body = document.querySelector("body");
+const filters = document.querySelector(".filters");
 
 // !----------------------------- Global variables
 let allWorks = [];
@@ -29,11 +32,11 @@ const createGallery = (gallery) => {
   newGallery.classList.add("gallery");
 
   gallery.forEach((work) => {
-    const figure = document.createElement("figure");
-    const img = document.createElement("img");
-    const figcaption = document.createElement("figcaption");
+    const figure      = document.createElement("figure");
+    const img         = document.createElement("img");
+    const figcaption  = document.createElement("figcaption");
 
-    img.src = work.imageUrl;
+    img.src                = work.imageUrl;
     figcaption.textContent = work.title;
 
     figure.appendChild(img);
@@ -43,6 +46,10 @@ const createGallery = (gallery) => {
 
   portfolio.appendChild(newGallery);
 };
+
+// ! ------------- Function for creating filters
+
+
 
 // !----------------------------- General functions
 const fetchData = async () => {

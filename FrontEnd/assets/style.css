@@ -346,6 +346,11 @@ input[type="submit"] {
     cursor: pointer;
 }
 
+.errorLogin {
+    margin-top: 25px;
+    margin-bottom: -20px;
+    color: red;
+}
 
 footer nav ul {
     display: flex;

@@ -187,9 +187,18 @@ nav ul {
 
 nav li {
     padding: 0 10px;
+    cursor: pointer;
 }
 
-li:hover {
+nav li:hover {
+    color: #B1663C;
+}
+nav a {
+    text-decoration: none;
+    color: black;
+}
+
+nav a:hover {
     color: #B1663C;
 }
 
@@ -244,14 +253,13 @@ li:hover {
 .filters li {
     border: 1px solid #1D6154;
     border-radius: 60px;
-    background-color: white;
+    background-color:  #FFFEF8;
     font-size: 16px;
     color: black;
     font-family: Work Sans;
     padding: 10px;
     cursor: pointer;
 }
-
 /************** end design filters **************/
 
 .gallery {
@@ -320,6 +328,7 @@ input[type="submit"] {
     width: 180px;
     text-align: center;
     border-radius: 60px;
+    cursor: pointer;
 }
 
 /************** login page design **************/

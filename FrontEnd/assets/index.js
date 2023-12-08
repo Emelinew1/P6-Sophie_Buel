@@ -1,8 +1,13 @@
 "use strict";
 
+// !------------------------------------- Constants
+
+
+
 // !-------------------------------------- Global variables
 let allWorks = [];
 let allCategories = [];
+let modal = null;
 
 // !---------------------------------------Functions
 
@@ -48,11 +53,11 @@ const createGallery = (gallery) => {
   newGallery.classList.add("gallery");
 
   gallery.forEach((work) => {
-    const figure      = document.createElement("figure");
-    const img         = document.createElement("img");
-    const figcaption  = document.createElement("figcaption");
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const figcaption = document.createElement("figcaption");
 
-    img.src                = work.imageUrl;
+    img.src = work.imageUrl;
     figcaption.textContent = work.title;
 
     figure.appendChild(img);
@@ -68,12 +73,6 @@ const createGallery = (gallery) => {
 const createFilters = () => {
   const filters = document.querySelector(".filters");
 
-  if (!filters.querySelector("li")) {
-    allCategories.forEach(category => {
-      filters.innerHTML += `<li id="${category.id}">${category.name}</li>`;
-    });
-
-  }
 
   filters.addEventListener("click", (event) => {
     const target = event.target;
@@ -93,11 +92,32 @@ const filterCategory = (categoryId) => {
   console.log("Filtering by category:", categoryId);
 
   const filteredGallery = categoryId === "0"
-    ? allWorks // Afficher tous les éléments si le filtre est "ALL" ou "0"
+    ? allWorks 
     : allWorks.filter(work => work.categoryId == categoryId);
 
   createGallery(filteredGallery);
 };
+
+// !------------------------------------- Function for adding a banner
+
+function addBanner() {
+  const banner = document.createElement("div");
+  banner.classList.add("banner");
+
+  const bannerTxt = document.createElement("a");
+  bannerTxt.innerText = "Mode édition";
+
+  const editIcon = document.createElement("i");
+  editIcon.classList.add("fa-regular", "fa-pen-to-square");
+  bannerTxt.appendChild(editIcon);
+
+  banner.appendChild(bannerTxt);
+  document.body.insertBefore(banner, document.body.firstChild);
+}
+
+// !------------------------------------- Modal creation 
+
+
 
 // !-------------------------------------  General functions
 const fetchData = async () => {
@@ -108,3 +128,4 @@ const fetchData = async () => {
 };
 
 fetchData();
+addBanner();

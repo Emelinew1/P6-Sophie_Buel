@@ -178,11 +178,34 @@ h2 {
     color: #1D6154
 }
 
+/************** design banner **************/
+
+.banner {
+    display: flex;
+    justify-content: center;
+    padding: 20px 40px;
+    background-color:black;
+    color: white;
+}
+
+.banner a {
+    display: flex;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+
+}
+
+.banner i {
+    position: absolute;
+    margin-left: -21px;
+}
+
+
 nav ul {
     display: flex;
     align-items: center;
     list-style-type: none;
-
 }
 
 nav li {
@@ -190,7 +213,8 @@ nav li {
     cursor: pointer;
 }
 
-nav li:hover {
+nav li:hover,
+nav li:focus {
     color: #B1663C;
 }
 nav a {
@@ -198,11 +222,13 @@ nav a {
     color: black;
 }
 
-nav a:hover {
+nav a:hover,
+nav a:focus {
     color: #B1663C;
 }
 
-#login a:hover {
+#login a:hover,
+#login a:focus {
     color: #B1663C;
     text-decoration:none;
 }
@@ -253,13 +279,22 @@ nav a:hover {
 .filters li {
     border: 1px solid #1D6154;
     border-radius: 60px;
+    padding: 10px;
     background-color:  #FFFEF8;
     font-size: 16px;
-    color: black;
-    font-family: Work Sans;
-    padding: 10px;
+    color:#1D6154;
+    font-family: Syne;
+    font-size: 16px;;
+
     cursor: pointer;
 }
+
+.filters li:hover,
+.filters li:focus {
+    background-color: #1D6154;
+    color:#FFFEF8;
+}
+
 /************** end design filters **************/
 
 .gallery {

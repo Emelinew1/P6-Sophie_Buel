@@ -293,19 +293,95 @@ nav a:focus {
 /************** end design modify gallery **************/
 
 /************** design modal **************/
-
 .modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: fixed;
-    top: calc(50vh - 315px);
-    left: calc(50vw - 340px);
+    top: calc(50vh - 340px);
+    left: calc(50vw - 320px);
     z-index: 1000;
+    margin: 0;
     border-radius: 10px;
-    width: 630px;
-    height: 630px;
-    background-color: white;  
+    width: 640px;
+    height: 680px;
+    background-color: white;
 }
 
+.iconModal {
+    align-self: flex-end;
+    padding: 26px 30px;
+}
 
+.fa-xmark {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.modal h3 {
+    display: flex;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.modal ul {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 50px 100px;
+    column-gap: 10px;
+    row-gap: 20px;
+}
+
+.modal li {
+    width: calc((100% - 60px) / 5);
+}
+
+.modal figure {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.modal img {
+    width: 78px;
+    height: 104px;
+}
+
+.fa-trash-can {
+    position: absolute;
+    right: 0;
+    top:4px;
+    border-radius: 2px;
+    padding: 2px;
+    font-size: 9px;
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+.line {
+    
+    width: 420px;
+    height: 1px;
+    background-color: #B3B3B3;;
+}
+
+.modal button {
+    text-align: center;
+    margin-top: 40px;
+    border-radius: 60px;
+    width: 237px;
+    height: 36px;
+    font-family: 'Syne';
+    font-size: 14px;
+    color: white;
+    background-color: #1D6154;
+    cursor: pointer;
+}
+
+/************** end design modal **************/
 /************** design modify gallery **************/
 
 .modify {

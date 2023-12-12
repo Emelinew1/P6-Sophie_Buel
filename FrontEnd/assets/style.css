@@ -178,30 +178,6 @@ h2 {
     color: #1D6154
 }
 
-/************** design banner **************/
-
-.banner {
-    display: flex;
-    justify-content: center;
-    padding: 20px 40px;
-    background-color:black;
-    color: white;
-}
-
-.banner a {
-    display: flex;
-    position: relative;
-    text-decoration: none;
-    cursor: pointer;
-
-}
-
-.banner i {
-    position: absolute;
-    margin-left: -21px;
-}
-
-
 nav ul {
     display: flex;
     align-items: center;
@@ -217,6 +193,7 @@ nav li:hover,
 nav li:focus {
     color: #B1663C;
 }
+
 nav a {
     text-decoration: none;
     color: black;
@@ -230,7 +207,7 @@ nav a:focus {
 #login a:hover,
 #login a:focus {
     color: #B1663C;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 #introduction {
@@ -261,8 +238,88 @@ nav a:focus {
 }
 
 #portfolio h2 {
-    text-align: center;
-    margin-bottom: 1em;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0em;
+    margin-top: 3em;
+    gap: 20px;
+}
+
+/************** design banner **************/
+
+.banner {
+    display: flex;
+    justify-content: center;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding: 20px 40px;
+    box-sizing: border-box;
+    width: 100vw;
+    background-color: black;
+    color: white;
+}
+
+.banner a {
+    display: flex;
+    position: relative;
+    text-decoration: none;
+}
+
+.banner i {
+    position: absolute;
+    margin-left: -21px;
+}
+
+/************** end design banner **************/
+/************** design modify gallery **************/
+
+.modify {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    background-color: #FFFEF8;
+    cursor: pointer;
+}
+
+.modify:hover,
+.modify:focus {
+    color: #B1663C;
+}
+
+/************** end design modify gallery **************/
+
+/************** design modal **************/
+
+.modal {
+    position: fixed;
+    top: calc(50vh - 315px);
+    left: calc(50vw - 340px);
+    z-index: 1000;
+    border-radius: 10px;
+    width: 630px;
+    height: 630px;
+    background-color: white;  
+}
+
+
+/************** design modify gallery **************/
+
+.modify {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+    top: auto;
+
+}
+
+.modify-gallery:hover,
+.modify-gallery:focus {
+    color: #B1663C;
 }
 
 /************** design filters **************/
@@ -271,7 +328,7 @@ nav a:focus {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 30px;
+    margin: 40px;
     gap: 20px;
 
 }
@@ -280,11 +337,12 @@ nav a:focus {
     border: 1px solid #1D6154;
     border-radius: 60px;
     padding: 10px;
-    background-color:  #FFFEF8;
+    background-color: #FFFEF8;
     font-size: 16px;
-    color:#1D6154;
+    color: #1D6154;
     font-family: Syne;
-    font-size: 16px;;
+    font-size: 16px;
+    ;
 
     cursor: pointer;
 }
@@ -292,7 +350,7 @@ nav a:focus {
 .filters li:hover,
 .filters li:focus {
     background-color: #1D6154;
-    color:#FFFEF8;
+    color: #FFFEF8;
 }
 
 /************** end design filters **************/
@@ -310,24 +368,24 @@ nav a:focus {
 
 }
 
-#contact, 
+#contact,
 #login {
     width: 50%;
     margin: auto;
 }
 
-#contact>*, 
+#contact>*,
 #login>* {
     text-align: center;
 
 }
 
 #contact h2,
-#login h2{
+#login h2 {
     margin-bottom: 20px;
 }
 
-#contact form, 
+#contact form,
 #login form {
     text-align: left;
     margin-top: 30px;
@@ -335,7 +393,7 @@ nav a:focus {
     flex-direction: column;
 }
 
-#contact input, 
+#contact input,
 #login input {
     height: 50px;
     font-size: 1.2em;
@@ -380,7 +438,7 @@ input[type="submit"] {
     font-family: 'Syne';
     color: white;
     background-color: #1D6154;
-    cursor: pointer;    
+    cursor: pointer;
 }
 
 #login a {
@@ -406,4 +464,3 @@ footer nav ul {
 #footer-login {
     margin-top: 200px;
 }
-

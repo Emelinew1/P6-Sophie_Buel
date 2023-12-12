@@ -1,13 +1,12 @@
 "use strict";
 
 // !------------------------------------- Constants
-
-
+const portfolio = document.getElementById("portfolio");
+const filters = document.querySelector(".filters");
 
 // !-------------------------------------- Global variables
 let allWorks = [];
 let allCategories = [];
-let modal = null;
 
 // !---------------------------------------Functions
 
@@ -42,8 +41,6 @@ const initGallery = () => {
 
 // !------------------------------------- Function for creating the gallery 
 const createGallery = (gallery) => {
-  let portfolio = document.getElementById("portfolio");
-
   let existingGallery = document.querySelector(".gallery");
   if (existingGallery) {
     existingGallery.remove();
@@ -53,8 +50,8 @@ const createGallery = (gallery) => {
   newGallery.classList.add("gallery");
 
   gallery.forEach((work) => {
-    const figure = document.createElement("figure");
-    const img = document.createElement("img");
+    const figure     = document.createElement("figure");
+    const img        = document.createElement("img");
     const figcaption = document.createElement("figcaption");
 
     img.src = work.imageUrl;
@@ -71,9 +68,6 @@ const createGallery = (gallery) => {
 
 // !-------------------------------------  Function for creating filters
 const createFilters = () => {
-  const filters = document.querySelector(".filters");
-
-
   filters.addEventListener("click", (event) => {
     const target = event.target;
 
@@ -89,7 +83,6 @@ const createFilters = () => {
 
 // !------------------------------------- Function for filtering works by category
 const filterCategory = (categoryId) => {
-  console.log("Filtering by category:", categoryId);
 
   const filteredGallery = categoryId === "0"
     ? allWorks 
@@ -98,7 +91,7 @@ const filterCategory = (categoryId) => {
   createGallery(filteredGallery);
 };
 
-// !------------------------------------- Function for adding a banner
+// !------------------------------------- Banner
 
 function addBanner() {
   const banner = document.createElement("div");
@@ -114,8 +107,51 @@ function addBanner() {
   banner.appendChild(bannerTxt);
   document.body.insertBefore(banner, document.body.firstChild);
 }
+// Removes the filters
+function removeFilters() {
+  const filtersElements = document.querySelectorAll(".filters");
+
+  filtersElements.forEach((filtersElement) => {
+    filtersElement.innerHTML = "";
+  });
+}
 
 // !------------------------------------- Modal creation 
+function setDeleteModal() { 
+  const modal = document.createElement("section");
+  const iconModal = document.createElement("div");
+  const deleteBtn = document.createElement("i");
+  
+  modal.classList.add("modal");
+  deleteBtn.classList.add("fa-solid", "fa-xmark");
+  
+  portfolio.appendChild(modal);
+  modal.appendChild(iconModal);
+  iconModal.appendChild(deleteBtn);
+}
+
+/**
+ * Adds a modify button to the DOM.
+ */
+function addModifyBtn() {
+  const modifyBtn = document.createElement("button");
+  modifyBtn.classList.add("modify");
+
+  const editIcon = document.createElement("i");
+  editIcon.classList.add("fa-regular", "fa-pen-to-square");
+
+
+  modifyBtn.appendChild(editIcon);
+  modifyBtn.appendChild(document.createTextNode(" modifier"));
+
+  const portfolioTitle = document.getElementById("portfolioTitle");
+  portfolioTitle.appendChild(modifyBtn);
+
+  modifyBtn.addEventListener("click", setDeleteModal);
+}
+
+addModifyBtn();
+
 
 
 
@@ -129,3 +165,4 @@ const fetchData = async () => {
 
 fetchData();
 addBanner();
+removeFilters()

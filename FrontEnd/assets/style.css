@@ -204,6 +204,10 @@ nav a:focus {
     color: #B1663C;
 }
 
+ul, li {
+    list-style-type: none;
+}
+
 #login a:hover,
 #login a:focus {
     color: #B1663C;
@@ -293,6 +297,15 @@ nav a:focus {
 /************** end design modify gallery **************/
 
 /************** design modal **************/
+
+/* First modal */
+
+body.modal-open {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
 .modal {
     display: flex;
     flex-direction: column;
@@ -309,11 +322,19 @@ nav a:focus {
 }
 
 .iconModal {
-    align-self: flex-end;
+    display: flex;
+    justify-content: space-between;
     padding: 26px 30px;
+    width: 90%;
 }
 
 .fa-xmark {
+    align-self: flex-end;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.fa-arrow-left {
     font-size: 22px;
     cursor: pointer;
 }
@@ -328,7 +349,7 @@ nav a:focus {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    margin: 50px 100px;
+    margin: 50px 100px 30px 100px;
     column-gap: 10px;
     row-gap: 20px;
 }
@@ -362,7 +383,7 @@ nav a:focus {
 }
 
 .line {
-    
+    margin-top: 20px;
     width: 420px;
     height: 1px;
     background-color: #B3B3B3;;
@@ -378,6 +399,79 @@ nav a:focus {
     font-size: 14px;
     color: white;
     background-color: #1D6154;
+    cursor: pointer;
+}
+
+/* Second modal */
+
+
+.add-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border-radius: 3px;
+    gap:15px;
+    width: 420px;
+    height: 169px;
+    background-color: #E8F1F6;
+}
+
+.add-photo .fa-image {
+    margin-top: 15px;
+    font-size:  76px;
+    color: #B9C5CC;
+    background-color: #E8F1F6;
+}
+
+.add-photo button {
+    margin: 0;
+    border-radius: 50px;
+    border: none;
+    padding: 10px;
+    width: 173px;
+    font-size: 14px;
+    color:#306685;
+    background-color: #CBD6DC;
+    font-family: Work Sans;
+    cursor: pointer;
+}
+
+.add-photo p {
+   font-size: 10px;
+   padding-bottom: 19px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    gap: 20px;
+    font-family: Work Sans;
+    font-size: 14px;
+    color: #3D3D3D;
+}
+
+form input, select {
+    border: 1px solid #B9C5CC;
+    box-sizing: border-box;
+    border-radius: 3px;
+    padding-left: 10px;
+    width: 420px;
+    height: 51px;
+    box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+}
+
+#submit {
+    align-self: center;
+    margin-top: 20px;
+    border: none;
+    font-size: 14px;
+    color:white;
+    background-color: #A7A7A7;
+    font-family: Syne;
+    font-size: 14px;
     cursor: pointer;
 }
 

@@ -8,7 +8,7 @@ const filters = document.querySelector(".filters");
 let allWorks = [];
 let allCategories = [];
 
-// !---------------------------------------Functions
+// !--------------------------------------- API Functions
 
 /**
  * Retrieves all works from the API.
@@ -30,16 +30,46 @@ const getCategories = async () => {
   allCategories = await response.json();
 };
 
+// !--------------------------------------- Gallery Functions
+
 /**
  * Initializes the gallery.
- *
- * @param {Array} allWorks - An array containing all the works for the gallery.
  */
 const initGallery = () => {
   createGallery(allWorks);
 };
 
-// !------------------------------------- Function for creating the gallery 
+/**
+ * Creates a gallery item element.
+ *
+ * @param {Object} work - The work object.
+ * @return {HTMLLIElement} The gallery item element.
+ */
+const createGalleryItem = (work) => {
+  const listItem = document.createElement("li");
+  const figure = document.createElement("figure");
+  const img = document.createElement("img");
+  const deleteIcon = document.createElement("i");
+
+  img.src = work.imageUrl;
+  deleteIcon.classList.add("fa-solid", "fa-trash-can");
+  deleteIcon.addEventListener("click", () => {
+    deletePhoto(work.id, listItem);
+  });
+
+  figure.appendChild(img);
+  figure.appendChild(deleteIcon);
+  listItem.appendChild(figure);
+
+  return listItem;
+};
+
+/**
+ * Creates a gallery by adding a new div element with the class "gallery" to the DOM.
+ * If an existing gallery already exists, it is removed before creating the new one.
+ *
+ * @param {Array} gallery - An array of objects representing the gallery items.
+ */
 const createGallery = (gallery) => {
   let existingGallery = document.querySelector(".gallery");
   if (existingGallery) {
@@ -50,23 +80,18 @@ const createGallery = (gallery) => {
   newGallery.classList.add("gallery");
 
   gallery.forEach((work) => {
-    const figure     = document.createElement("figure");
-    const img        = document.createElement("img");
-    const figcaption = document.createElement("figcaption");
-
-    img.src = work.imageUrl;
-    figcaption.textContent = work.title;
-
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
-    newGallery.appendChild(figure);
+    const listItem = createGalleryItem(work);
+    newGallery.appendChild(listItem);
   });
 
   portfolio.appendChild(newGallery);
 };
 
+// !--------------------------------------- Filters Functions
 
-// !-------------------------------------  Function for creating filters
+/**
+ * Creates filters and adds click event listeners.
+ */
 const createFilters = () => {
   filters.addEventListener("click", (event) => {
     const target = event.target;
@@ -75,24 +100,31 @@ const createFilters = () => {
       const categoryId = target.id.toLowerCase();
       filterCategory(categoryId);
 
+      // Remove active class from all filters and add to the clicked one
       filters.querySelectorAll("li").forEach(li => li.classList.remove("active"));
       target.classList.add("active");
     }
   });
 };
 
-// !------------------------------------- Function for filtering works by category
+/**
+ * Filters works by category and updates the gallery.
+ *
+ * @param {string} categoryId - The category ID.
+ */
 const filterCategory = (categoryId) => {
-
   const filteredGallery = categoryId === "0"
-    ? allWorks 
+    ? allWorks
     : allWorks.filter(work => work.categoryId == categoryId);
 
   createGallery(filteredGallery);
 };
 
-// !------------------------------------- Banner
+// !--------------------------------------- Banner Functions
 
+/**
+ * Adds a banner to the page.
+ */
 function addBanner() {
   const banner = document.createElement("div");
   banner.classList.add("banner");
@@ -107,7 +139,12 @@ function addBanner() {
   banner.appendChild(bannerTxt);
   document.body.insertBefore(banner, document.body.firstChild);
 }
-// Removes the filters
+
+// !--------------------------------------- Modify Button Functions
+
+/**
+ * Removes filters from the page.
+ */
 function removeFilters() {
   const filtersElements = document.querySelectorAll(".filters");
 
@@ -116,22 +153,8 @@ function removeFilters() {
   });
 }
 
-// !------------------------------------- Modal creation 
-function setDeleteModal() { 
-  const modal = document.createElement("section");
-  const iconModal = document.createElement("div");
-  const iconClose = document.createElement("i");
-  
-  modal.classList.add("modal");
-  iconClose.classList.add("fa-solid", "fa-xmark");
-  
-  portfolio.appendChild(modal);
-  modal.appendChild(iconModal);
-  iconModal.appendChild(iconClose);
-}
-
 /**
- * Adds a modify button to the DOM.
+ * Adds a modify button to the page.
  */
 function addModifyBtn() {
   const modifyBtn = document.createElement("button");
@@ -139,7 +162,6 @@ function addModifyBtn() {
 
   const editIcon = document.createElement("i");
   editIcon.classList.add("fa-regular", "fa-pen-to-square");
-
 
   modifyBtn.appendChild(editIcon);
   modifyBtn.appendChild(document.createTextNode(" modifier"));
@@ -150,12 +172,152 @@ function addModifyBtn() {
   modifyBtn.addEventListener("click", setDeleteModal);
 }
 
-addModifyBtn();
+// !--------------------------------------- Modal Functions
+// Use const and let appropriately, and group variable declarations
+function setDeleteModal() {
+  const modal = document.createElement("section");
+  const iconModal = document.createElement("div");
+  const arrowLeft = document.createElement("i");
+  const iconClose = document.createElement("i");
+  const modalList = document.createElement("ul");
+  const titleModal = document.createElement("h3");
+  const line = document.createElement("div");
+  const addImgBtn = document.createElement("button");
+
+  modal.classList.add("modal");
+  iconModal.classList.add("iconModal");
+  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
+  iconClose.classList.add("fa-solid", "fa-xmark");
+  line.classList.add("line");
+
+  titleModal.textContent = "Galerie Photo";
+  addImgBtn.textContent = "Ajouter une photo";
+
+  portfolio.appendChild(modal);
+  modal.appendChild(iconModal);
+
+  iconModal.appendChild(arrowLeft);
+  iconModal.appendChild(iconClose);
+  modal.appendChild(titleModal);
+  modal.appendChild(modalList);
+
+  allWorks.forEach((work) => {
+    const listItem = createGalleryItem(work);
+    modalList.appendChild(listItem);
+  });
+
+  modal.appendChild(line);
+  modal.appendChild(addImgBtn);
+
+  iconClose.addEventListener("click", closeModal);
+  addImgBtn.addEventListener("click", setCreateModal);
+
+  document.body.classList.add("modal-open");
+}
+
+function setCreateModal() {
+  const modal = document.createElement("section");
+  const iconModal = document.createElement("div");
+  const arrowLeft = document.createElement("i");
+  const iconClose = document.createElement("i");
+  const titleModal = document.createElement("h3");
+  const form = document.createElement("form");
+  const addPhoto = document.createElement("div");
+  const iconeImg = document.createElement("i");
+  const buttonImg = document.createElement("button");
+  const detailsImg = document.createElement("p");
+  const line = document.createElement("div");
+
+  const titleImg = document.createElement("label");
+  titleImg.htmlFor = "texte";
+  titleImg.textContent = "Titre";
+  const inputTxt = document.createElement("input");
+  inputTxt.type = "text";
+  inputTxt.id = "texte";
+  inputTxt.name = "texte";
+
+  const labelCat = document.createElement("label");
+  labelCat.htmlFor = "menuDeroulant";
+  labelCat.textContent = "Catégorie";
+  const select = document.createElement("select");
+  select.id = "categorie";
+  select.name = "categorie";
+
+  const options = ["Appartements", "Objets", "Hôtels & restaurants"];
+  for (const optionText of options) {
+    const option = document.createElement("option");
+    option.value = optionText.toLowerCase().replace(" ", "");
+    option.textContent = optionText;
+    select.appendChild(option);
+  }
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.textContent = "Valider";
+  submitButton.id = "submit";
+
+  document.body.classList.add("modal-open");
+  modal.classList.add("modal");
+  iconModal.classList.add("iconModal");
+  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
+  iconClose.classList.add("fa-solid", "fa-xmark");
+  iconeImg.classList.add("fa-regular", "fa-image");
+  addPhoto.classList.add("add-photo");
+  
+
+  line.classList.add("line");
+
+ 
+  titleModal.textContent = "Ajout photo";
+  buttonImg.textContent = "+ Ajouter photo";
+  detailsImg.textContent = "jpg, png : 4mo max";
+
+
+  portfolio.appendChild(modal);
+  modal.appendChild(iconModal);
+  iconModal.appendChild(arrowLeft);
+  iconModal.appendChild(iconClose);
+  modal.appendChild(titleModal);
+  modal.appendChild(addPhoto);
+  addPhoto.appendChild(iconeImg);
+  addPhoto.appendChild(buttonImg);
+  addPhoto.appendChild(detailsImg);
+  form.appendChild(titleImg);
+  form.appendChild(inputTxt);
+  form.appendChild(labelCat);
+  form.appendChild(select);
+  form.appendChild(line);
+  form.appendChild(submitButton);
+  modal.appendChild(form);
+
+  arrowLeft.addEventListener("click", setDeleteModal);
+  iconClose.addEventListener("click", closeModal);
+
+}
+
+/**
+ * Closes the modal.
+ */
+function closeModal() {
+  const closeElement = document.querySelector(".fa-xmark");
+
+  if (closeElement) {
+    closeElement.addEventListener("click", () => {
+      const modal = document.querySelector(".modal"); // ou ajustez le sélecteur selon vos besoins
+      closeModal(modal);
+    });
+  }
+}
 
 
 
+// !--------------------------------------- functions delete works
 
-// !-------------------------------------  General functions
+
+// !--------------------------------------- Initialization
+
+/**
+ * Fetches data and initializes the page.
+ */
 const fetchData = async () => {
   await getWorks();
   await getCategories();
@@ -165,4 +327,5 @@ const fetchData = async () => {
 
 fetchData();
 addBanner();
-removeFilters()
+removeFilters();
+addModifyBtn();

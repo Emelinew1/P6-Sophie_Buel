@@ -55,7 +55,7 @@ const createGalleryItem = (work) => {
   img.src = work.imageUrl;
   deleteIcon.classList.add("fa-solid", "fa-trash-can");
   deleteIcon.addEventListener("click", () => {
-      deleteWork(work.id, listItem);
+    deleteWork(work.id);
   });
 
   figure.appendChild(img);
@@ -88,6 +88,7 @@ const createGallery = (gallery) => {
   portfolio.appendChild(newGallery);
 };
 
+
 // !--------------------------------------- Filters Functions
 
 /**
@@ -114,6 +115,11 @@ const createFilters = () => {
  * @param {string} categoryId - The category ID.
  */
 const filterCategory = (categoryId) => {
+  if (allWorks.length === 0) {
+    // allWorks n'est pas encore chargé, ne faites rien.
+    return;
+  }
+
   const filteredGallery = categoryId === "0"
     ? allWorks
     : allWorks.filter(work => work.categoryId == categoryId);
@@ -121,8 +127,29 @@ const filterCategory = (categoryId) => {
   createGallery(filteredGallery);
 };
 
-// !--------------------------------------- Banner Functions
+// !--------------------------------------- User Functions
+/**
+ * Display the user profile by creating a gallery of all their works and
+ * adding filters for sorting and filtering the works.
+ *
+ * @param {array} allWorks - An array of all the user's works
 
+ */
+function displayUser() {
+  createGallery(allWorks);
+  createFilters();
+}
+
+// !--------------------------------------- Admin Functions
+function displayAdmin() {
+  createGallery(allWorks);
+  addBanner();
+  removeFilters();
+  addModifyBtn();
+  login();
+}
+
+// !--------------------------------------- Banner Functions
 /**
  * Adds a banner to the page.
  */
@@ -141,8 +168,7 @@ function addBanner() {
   document.body.insertBefore(banner, document.body.firstChild);
 }
 
-// !--------------------------------------- Modify Button Functions
-
+// !--------------------------------------- Remove Filters
 /**
  * Removes filters from the page.
  */
@@ -153,10 +179,7 @@ function removeFilters() {
     filtersElement.innerHTML = "";
   });
 }
-
-/**
- * Adds a modify button to the page.
- */
+// !--------------------------------------- Modify Button Functions
 function addModifyBtn() {
   const modifyBtn = document.createElement("button");
   modifyBtn.classList.add("modify");
@@ -171,10 +194,14 @@ function addModifyBtn() {
   portfolioTitle.appendChild(modifyBtn);
 
   modifyBtn.addEventListener("click", setDeleteModal);
-
+}
 
 // !--------------------------------------- Modal Functions
-// Use const and let appropriately, and group variable declarations
+
+/**
+ * Sets up the delete modal by creating the necessary DOM elements and attaching event listeners.
+ * 
+ */
 function setDeleteModal() {
   const modal = document.createElement("section");
   const iconModal = document.createElement("div");
@@ -194,7 +221,7 @@ function setDeleteModal() {
 
   titleModal.textContent = "Galerie Photo";
   addImgBtn.textContent = "Ajouter une photo";
-  
+
 
   portfolio.appendChild(modal);
   modal.appendChild(iconModal);
@@ -218,6 +245,10 @@ function setDeleteModal() {
   document.body.classList.add("modal-open");
 }
 
+/**
+ * Sets up the create modal by creating and appending the necessary elements.
+
+ */
 function setCreateModal() {
   const modal = document.createElement("section");
   const iconModal = document.createElement("div");
@@ -265,11 +296,11 @@ function setCreateModal() {
   iconClose.classList.add("fa-solid", "fa-xmark");
   iconeImg.classList.add("fa-regular", "fa-image");
   addPhoto.classList.add("add-photo");
-  
+
 
   line.classList.add("line");
 
- 
+
   titleModal.textContent = "Ajout photo";
   buttonImg.textContent = "+ Ajouter photo";
   detailsImg.textContent = "jpg, png : 4mo max";
@@ -297,52 +328,79 @@ function setCreateModal() {
 
 }
 
+// !--------------------------------------- Close modal
 function closeModal() {
   const modal = document.querySelector(".modal");
   modal.remove();
   document.body.classList.remove("modal-open");
 }
-}
+
 
 // !--------------------------------------- Delete work
-
-const deleteWork = async (Id, listItem) => {
-  console.log(typeof listItem, listItem);
+const deleteWork = async (Id) => {
   const token = localStorage.getItem("userToken");
-  console.log(typeof token, token);
   try {
-      const response = await fetch(`http://localhost:5678/api/works/${Id}`, {
-          method: "DELETE",
-          headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-          }
-      });
+    const response = await fetch(`http://localhost:5678/api/works/${Id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
 
-      if (response.ok) {
-          listItem.remove();
-      } else {
-          const errorMessage = await response.text();
-          console.error(`Une erreur est survenue: ${errorMessage}`);
-      }
+    if (response.ok) {
+      alert("Le travail a bien été supprimé");
+
+    } else {
+      const errorMessage = "Une erreur est survenue lors de la suppression du travail.";
+      console.error(errorMessage);
+    }
   } catch (error) {
-      console.error("Veuillez vous connecter:", error);
+    console.error("Veuillez vous connecter :", error);
+  } finally {
+    setDeleteModal();
   }
 };
+// !--------------------------------------- Log in
+function login() {
+  const log = document.getElementById("log");
 
+  const userToken = localStorage.getItem("userToken");
+
+  if (userToken) {
+    log.innerText = "logout";
+
+    log.addEventListener("click", (event) => {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userId");
+      log.innerText = "login";
+
+      banner.remove();
+      modifyBtn.remove();
+
+      alert("Vous êtes déconnecté");
+    });
+  } else {
+    log.innerText = "login";
+  }
+}
 // !--------------------------------------- Initialization
 
 /**
- * Fetches data and initializes the page.
+ * Initializes the application by fetching works and categories.
+ * Checks if the user is logged in and displays the appropriate page.
+ *
+ * @return {Promise<void>} - A promise that resolves when the initialization is complete.
  */
-const fetchData = async () => {
+async function initialize() {
   await getWorks();
   await getCategories();
-  initGallery();
-  createFilters();
-    }
+  const userToken = localStorage.getItem("userToken");
+  if (userToken) {
+    displayAdmin();
+  } else {
+    displayUser();
+  }
+}
 
-fetchData();
-addBanner();
-removeFilters();
-addModifyBtn();
+initialize();

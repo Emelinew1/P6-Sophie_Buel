@@ -3,7 +3,7 @@
 // !------------------------------------- Constants
 const portfolio = document.getElementById("portfolio");
 const filters = document.querySelector(".filters");
-const token = localStorage.getItem("userToken");
+
 
 // !-------------------------------------- Global variables
 let allWorks = [];
@@ -307,7 +307,9 @@ function closeModal() {
 // !--------------------------------------- Delete work
 
 const deleteWork = async (Id, listItem) => {
-
+  console.log(typeof listItem, listItem);
+  const token = localStorage.getItem("userToken");
+  console.log(typeof token, token);
   try {
       const response = await fetch(`http://localhost:5678/api/works/${Id}`, {
           method: "DELETE",
@@ -324,7 +326,7 @@ const deleteWork = async (Id, listItem) => {
           console.error(`Une erreur est survenue: ${errorMessage}`);
       }
   } catch (error) {
-      console.error("Veuillez vous reconnecter:", error);
+      console.error("Veuillez vous connecter:", error);
   }
 };
 

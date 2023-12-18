@@ -3,6 +3,7 @@
 // !------------------------------------- Constants
 const portfolio = document.getElementById("portfolio");
 const filters = document.querySelector(".filters");
+const token = localStorage.getItem("userToken");
 
 // !-------------------------------------- Global variables
 let allWorks = [];
@@ -54,7 +55,7 @@ const createGalleryItem = (work) => {
   img.src = work.imageUrl;
   deleteIcon.classList.add("fa-solid", "fa-trash-can");
   deleteIcon.addEventListener("click", () => {
-    deletePhoto(work.id, listItem);
+      deleteWork(work.id, listItem);
   });
 
   figure.appendChild(img);
@@ -170,7 +171,7 @@ function addModifyBtn() {
   portfolioTitle.appendChild(modifyBtn);
 
   modifyBtn.addEventListener("click", setDeleteModal);
-}
+
 
 // !--------------------------------------- Modal Functions
 // Use const and let appropriately, and group variable declarations
@@ -184,14 +185,16 @@ function setDeleteModal() {
   const line = document.createElement("div");
   const addImgBtn = document.createElement("button");
 
+
+  arrowLeft.classList.remove("fa-arrow-left");
   modal.classList.add("modal");
   iconModal.classList.add("iconModal");
-  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
   iconClose.classList.add("fa-solid", "fa-xmark");
   line.classList.add("line");
 
   titleModal.textContent = "Galerie Photo";
   addImgBtn.textContent = "Ajouter une photo";
+  
 
   portfolio.appendChild(modal);
   modal.appendChild(iconModal);
@@ -294,24 +297,36 @@ function setCreateModal() {
 
 }
 
-/**
- * Closes the modal.
- */
 function closeModal() {
-  const closeElement = document.querySelector(".fa-xmark");
-
-  if (closeElement) {
-    closeElement.addEventListener("click", () => {
-      const modal = document.querySelector(".modal"); // ou ajustez le sélecteur selon vos besoins
-      closeModal(modal);
-    });
-  }
+  const modal = document.querySelector(".modal");
+  modal.remove();
+  document.body.classList.remove("modal-open");
+}
 }
 
+// !--------------------------------------- Delete work
 
+const deleteWork = async (Id, listItem) => {
 
-// !--------------------------------------- functions delete works
+  try {
+      const response = await fetch(`http://localhost:5678/api/works/${Id}`, {
+          method: "DELETE",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+          }
+      });
 
+      if (response.ok) {
+          listItem.remove();
+      } else {
+          const errorMessage = await response.text();
+          console.error(`Une erreur est survenue: ${errorMessage}`);
+      }
+  } catch (error) {
+      console.error("Veuillez vous reconnecter:", error);
+  }
+};
 
 // !--------------------------------------- Initialization
 
@@ -323,7 +338,7 @@ const fetchData = async () => {
   await getCategories();
   initGallery();
   createFilters();
-};
+    }
 
 fetchData();
 addBanner();

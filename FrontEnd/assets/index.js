@@ -4,7 +4,6 @@
 const portfolio = document.getElementById("portfolio");
 const filters = document.querySelector(".filters");
 
-
 // !-------------------------------------- Global variables
 let allWorks = [];
 let allCategories = [];
@@ -32,13 +31,6 @@ const getCategories = async () => {
 };
 
 // !--------------------------------------- Gallery Functions
-
-/**
- * Initializes the gallery.
- */
-const initGallery = () => {
-  createGallery(allWorks);
-};
 
 /**
  * Creates a gallery item element.
@@ -88,26 +80,7 @@ const createGallery = (gallery) => {
   portfolio.appendChild(newGallery);
 };
 
-
 // !--------------------------------------- Filters Functions
-
-/**
- * Creates filters and adds click event listeners.
- */
-const createFilters = () => {
-  filters.addEventListener("click", (event) => {
-    const target = event.target;
-
-    if (target.tagName === "LI") {
-      const categoryId = target.id.toLowerCase();
-      filterCategory(categoryId);
-
-      // Remove active class from all filters and add to the clicked one
-      filters.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-      target.classList.add("active");
-    }
-  });
-};
 
 /**
  * Filters works by category and updates the gallery.
@@ -127,33 +100,50 @@ const filterCategory = (categoryId) => {
   createGallery(filteredGallery);
 };
 
+/**
+ * Creates filters and adds click event listeners.
+ */
+const createFilters = () => {
+  filters.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.tagName === "LI") {
+      const categoryId = target.id.toLowerCase();
+      filterCategory(categoryId);
+
+      // Remove active class from all filters and add to the clicked one
+      filters.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+      target.classList.add("active");
+    }
+  });
+};
+
 // !--------------------------------------- User Functions
 /**
  * Display the user profile by creating a gallery of all their works and
  * adding filters for sorting and filtering the works.
  *
- * @param {array} allWorks - An array of all the user's works
-
+ * @param {array} allWorks - An array of all the user's works.
  */
-function displayUser() {
+const displayUser = () => {
   createGallery(allWorks);
   createFilters();
-}
+};
 
 // !--------------------------------------- Admin Functions
-function displayAdmin() {
+const displayAdmin = () => {
   createGallery(allWorks);
   addBanner();
   removeFilters();
   addModifyBtn();
   login();
-}
+};
 
 // !--------------------------------------- Banner Functions
 /**
  * Adds a banner to the page.
  */
-function addBanner() {
+const addBanner = () => {
   const banner = document.createElement("div");
   banner.classList.add("banner");
 
@@ -166,21 +156,22 @@ function addBanner() {
 
   banner.appendChild(bannerTxt);
   document.body.insertBefore(banner, document.body.firstChild);
-}
+};
 
 // !--------------------------------------- Remove Filters
 /**
  * Removes filters from the page.
  */
-function removeFilters() {
+const removeFilters = () => {
   const filtersElements = document.querySelectorAll(".filters");
 
   filtersElements.forEach((filtersElement) => {
     filtersElement.innerHTML = "";
   });
-}
+};
+
 // !--------------------------------------- Modify Button Functions
-function addModifyBtn() {
+const addModifyBtn = () => {
   const modifyBtn = document.createElement("button");
   modifyBtn.classList.add("modify");
 
@@ -194,7 +185,7 @@ function addModifyBtn() {
   portfolioTitle.appendChild(modifyBtn);
 
   modifyBtn.addEventListener("click", setDeleteModal);
-}
+};
 
 // !--------------------------------------- Modal Functions
 
@@ -202,7 +193,7 @@ function addModifyBtn() {
  * Sets up the delete modal by creating the necessary DOM elements and attaching event listeners.
  * 
  */
-function setDeleteModal() {
+const setDeleteModal = () => {
   const modal = document.createElement("section");
   const iconModal = document.createElement("div");
   const arrowLeft = document.createElement("i");
@@ -212,7 +203,6 @@ function setDeleteModal() {
   const line = document.createElement("div");
   const addImgBtn = document.createElement("button");
 
-
   arrowLeft.classList.remove("fa-arrow-left");
   modal.classList.add("modal");
   iconModal.classList.add("iconModal");
@@ -221,7 +211,6 @@ function setDeleteModal() {
 
   titleModal.textContent = "Galerie Photo";
   addImgBtn.textContent = "Ajouter une photo";
-
 
   portfolio.appendChild(modal);
   modal.appendChild(iconModal);
@@ -243,26 +232,39 @@ function setDeleteModal() {
   addImgBtn.addEventListener("click", setCreateModal);
 
   document.body.classList.add("modal-open");
-}
+};
 
 /**
  * Sets up the create modal by creating and appending the necessary elements.
-
  */
-function setCreateModal() {
+const setCreateModal = () => {
   const modal = document.createElement("section");
   const iconModal = document.createElement("div");
   const arrowLeft = document.createElement("i");
   const iconClose = document.createElement("i");
   const titleModal = document.createElement("h3");
-  const form = document.createElement("form");
+
   const addPhoto = document.createElement("div");
   const iconeImg = document.createElement("i");
-  const buttonImg = document.createElement("button");
+
+  const labelImg = document.createElement("label");
+  labelImg.htmlFor = "image";
+
+  const imgInput = document.createElement("input");
+  imgInput.type = "file";
+  imgInput.id = "image";
+  imgInput.accept = ".jpg, .jpeg, .png";
+  imgInput.style.display = "none"; 
+  const addButton = document.createElement("input");
+  addButton.type = "button";
+  addButton.value = "+ Ajouter photo";
+  
+
   const detailsImg = document.createElement("p");
-  const line = document.createElement("div");
+  const form = document.createElement("form");
 
   const titleImg = document.createElement("label");
+  titleImg.id = "label";
   titleImg.htmlFor = "texte";
   titleImg.textContent = "Titre";
   const inputTxt = document.createElement("input");
@@ -284,10 +286,15 @@ function setCreateModal() {
     option.textContent = optionText;
     select.appendChild(option);
   }
+  const line = document.createElement("div");
+
   const submitButton = document.createElement("button");
   submitButton.type = "submit";
   submitButton.textContent = "Valider";
   submitButton.id = "submit";
+
+  titleModal.textContent = "Ajout photo";
+  detailsImg.textContent = "jpg, png : 4mo max";
 
   document.body.classList.add("modal-open");
   modal.classList.add("modal");
@@ -296,15 +303,8 @@ function setCreateModal() {
   iconClose.classList.add("fa-solid", "fa-xmark");
   iconeImg.classList.add("fa-regular", "fa-image");
   addPhoto.classList.add("add-photo");
-
-
+  addButton.classList.add("img-input");
   line.classList.add("line");
-
-
-  titleModal.textContent = "Ajout photo";
-  buttonImg.textContent = "+ Ajouter photo";
-  detailsImg.textContent = "jpg, png : 4mo max";
-
 
   portfolio.appendChild(modal);
   modal.appendChild(iconModal);
@@ -313,7 +313,9 @@ function setCreateModal() {
   modal.appendChild(titleModal);
   modal.appendChild(addPhoto);
   addPhoto.appendChild(iconeImg);
-  addPhoto.appendChild(buttonImg);
+  addPhoto.appendChild(labelImg);
+  addPhoto.appendChild(imgInput);
+  addPhoto.appendChild(addButton);
   addPhoto.appendChild(detailsImg);
   form.appendChild(titleImg);
   form.appendChild(inputTxt);
@@ -323,18 +325,23 @@ function setCreateModal() {
   form.appendChild(submitButton);
   modal.appendChild(form);
 
+  addButton.addEventListener("click", () => {
+    imgInput.click();
+  });
+  
+  imgInput.addEventListener("change", workPreview);
   arrowLeft.addEventListener("click", setDeleteModal);
   iconClose.addEventListener("click", closeModal);
 
-}
+
+};
 
 // !--------------------------------------- Close modal
-function closeModal() {
+const closeModal = () => {
   const modal = document.querySelector(".modal");
   modal.remove();
   document.body.classList.remove("modal-open");
-}
-
+};
 
 // !--------------------------------------- Delete work
 const deleteWork = async (Id) => {
@@ -350,19 +357,90 @@ const deleteWork = async (Id) => {
 
     if (response.ok) {
       alert("Le travail a bien été supprimé");
-
+      setDeleteModal();
     } else {
       const errorMessage = "Une erreur est survenue lors de la suppression du travail.";
       console.error(errorMessage);
     }
   } catch (error) {
     console.error("Veuillez vous connecter :", error);
-  } finally {
-    setDeleteModal();
   }
 };
+
+function displayPreview(file) {
+  const previewContainer = document.querySelector(".add-photo");
+  const previewImg = document.createElement("figure");
+  previewImg.classList.add("img-preview");
+
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    previewImg.innerHTML = `<img src="${reader.result}" alt="Preview">`;
+    previewContainer.innerHTML = "";
+    previewContainer.appendChild(previewImg);
+  });
+
+  reader.readAsDataURL(file);
+}
+
+// !--------------------------------------- Delete work
+function workPreview(event) {
+  const fileInput = event.target;
+  const file = fileInput.files[0];
+
+  const showAlert = () => {
+    alert("Veuillez sélectionner une image au format JPG, JPEG ou PNG, et dont la taille est inférieure à 4 Mo.");
+  };
+
+  if (file && validateWorkFile(file)) {
+    displayPreview(file);
+  } else {
+    showAlert();
+  }
+}
+  
+
+const validateWorkFile = (file) => {
+  const allowedTypes = new Set(["image/jpeg", "image/jpg", "image/png"]);
+  const maxFileSize = 4 * 1024 * 1024;
+
+  return allowedTypes.has(file.type) && file.size <= maxFileSize;
+};
+
+
+// !--------------------------------------- Add work
+const addWork = () => {
+  const formData = new FormData();
+  const inputTxt = document.getElementById("texte"); // Add this line to get the input element
+  formData.append("title", inputTxt.value);
+  formData.append("category", select.value);
+  formData.append("image", imgInput.files[0]);
+
+  const token = localStorage.getItem("userToken");
+
+  fetch(`http://localhost:5678/api/works`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: formData,
+  })
+    .then(res => {
+      if (res.ok) {
+        alert("Le travail a bien été ajouté");
+        setDeleteModal();
+      }
+    });
+};
+
+// !--------------------------------------- Validate form
+
+
+// !--------------------------------------- Reset Form
+
+
 // !--------------------------------------- Log in
-function login() {
+const login = () => {
   const log = document.getElementById("log");
 
   const userToken = localStorage.getItem("userToken");
@@ -383,24 +461,20 @@ function login() {
   } else {
     log.innerText = "login";
   }
-}
-// !--------------------------------------- Initialization
+};
 
+// !--------------------------------------- Initialization
 /**
  * Initializes the application by fetching works and categories.
  * Checks if the user is logged in and displays the appropriate page.
  *
  * @return {Promise<void>} - A promise that resolves when the initialization is complete.
  */
-async function initialize() {
+const initialize = async () => {
   await getWorks();
   await getCategories();
   const userToken = localStorage.getItem("userToken");
-  if (userToken) {
-    displayAdmin();
-  } else {
-    displayUser();
-  }
-}
+  userToken ? displayAdmin() : displayUser();
+};
 
 initialize();

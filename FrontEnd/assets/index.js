@@ -3,10 +3,15 @@
 // !------------------------------------- Constants
 const portfolio = document.getElementById("portfolio");
 const filters = document.querySelector(".filters");
+const submitButton = document.getElementById("submit");
+const inputTxtModal = document.getElementById("texte");
+const select = document.getElementById("categorie");
+const imgInput = document.getElementById("image");
 
 // !-------------------------------------- Global variables
 let allWorks = [];
 let allCategories = [];
+
 
 // !--------------------------------------- API Functions
 
@@ -80,6 +85,7 @@ const createGallery = (gallery) => {
   portfolio.appendChild(newGallery);
 };
 
+
 // !--------------------------------------- Filters Functions
 
 /**
@@ -89,7 +95,6 @@ const createGallery = (gallery) => {
  */
 const filterCategory = (categoryId) => {
   if (allWorks.length === 0) {
-    // allWorks n'est pas encore chargé, ne faites rien.
     return;
   }
 
@@ -207,6 +212,7 @@ const setDeleteModal = () => {
   modal.classList.add("modal");
   iconModal.classList.add("iconModal");
   iconClose.classList.add("fa-solid", "fa-xmark");
+  addImgBtn.classList.add("add-btn");
   line.classList.add("line");
 
   titleModal.textContent = "Galerie Photo";
@@ -238,12 +244,14 @@ const setDeleteModal = () => {
  * Sets up the create modal by creating and appending the necessary elements.
  */
 const setCreateModal = () => {
+
   const modal = document.createElement("section");
   const iconModal = document.createElement("div");
   const arrowLeft = document.createElement("i");
   const iconClose = document.createElement("i");
   const titleModal = document.createElement("h3");
 
+  const form = document.createElement("form");
   const addPhoto = document.createElement("div");
   const iconeImg = document.createElement("i");
 
@@ -253,27 +261,27 @@ const setCreateModal = () => {
   const imgInput = document.createElement("input");
   imgInput.type = "file";
   imgInput.id = "image";
+  imgInput.htmlFor = "image";
   imgInput.accept = ".jpg, .jpeg, .png";
-  imgInput.style.display = "none"; 
+  imgInput.style.display = "none";
   const addButton = document.createElement("input");
   addButton.type = "button";
   addButton.value = "+ Ajouter photo";
-  
 
   const detailsImg = document.createElement("p");
-  const form = document.createElement("form");
 
   const titleImg = document.createElement("label");
   titleImg.id = "label";
   titleImg.htmlFor = "texte";
   titleImg.textContent = "Titre";
-  const inputTxt = document.createElement("input");
-  inputTxt.type = "text";
-  inputTxt.id = "texte";
-  inputTxt.name = "texte";
+  const inputTxtModal = document.createElement("input");
+  inputTxtModal.type = "text";
+  inputTxtModal.id = "texte";
+  inputTxtModal.name = "texte";
+
 
   const labelCat = document.createElement("label");
-  labelCat.htmlFor = "menuDeroulant";
+  labelCat.htmlFor = "categorie";
   labelCat.textContent = "Catégorie";
   const select = document.createElement("select");
   select.id = "categorie";
@@ -295,7 +303,6 @@ const setCreateModal = () => {
 
   titleModal.textContent = "Ajout photo";
   detailsImg.textContent = "jpg, png : 4mo max";
-
   document.body.classList.add("modal-open");
   modal.classList.add("modal");
   iconModal.classList.add("iconModal");
@@ -311,30 +318,35 @@ const setCreateModal = () => {
   iconModal.appendChild(arrowLeft);
   iconModal.appendChild(iconClose);
   modal.appendChild(titleModal);
-  modal.appendChild(addPhoto);
+  modal.appendChild(form);
+  form.appendChild(addPhoto);
   addPhoto.appendChild(iconeImg);
   addPhoto.appendChild(labelImg);
   addPhoto.appendChild(imgInput);
   addPhoto.appendChild(addButton);
   addPhoto.appendChild(detailsImg);
   form.appendChild(titleImg);
-  form.appendChild(inputTxt);
+  form.appendChild(inputTxtModal);
   form.appendChild(labelCat);
   form.appendChild(select);
   form.appendChild(line);
   form.appendChild(submitButton);
-  modal.appendChild(form);
+
+  arrowLeft.addEventListener("click", setDeleteModal);
+  iconClose.addEventListener("click", closeModal);
 
   addButton.addEventListener("click", () => {
     imgInput.click();
   });
-  
   imgInput.addEventListener("change", workPreview);
-  arrowLeft.addEventListener("click", setDeleteModal);
-  iconClose.addEventListener("click", closeModal);
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    addWork();
+  });
 
-
+  document.body.classList.add("modal-open");;
 };
+
 
 // !--------------------------------------- Close modal
 const closeModal = () => {
@@ -367,6 +379,7 @@ const deleteWork = async (Id) => {
   }
 };
 
+// !--------------------------------------- Preview work
 function displayPreview(file) {
   const previewContainer = document.querySelector(".add-photo");
   const previewImg = document.createElement("figure");
@@ -382,7 +395,6 @@ function displayPreview(file) {
   reader.readAsDataURL(file);
 }
 
-// !--------------------------------------- Delete work
 function workPreview(event) {
   const fileInput = event.target;
   const file = fileInput.files[0];
@@ -397,7 +409,6 @@ function workPreview(event) {
     showAlert();
   }
 }
-  
 
 const validateWorkFile = (file) => {
   const allowedTypes = new Set(["image/jpeg", "image/jpg", "image/png"]);
@@ -408,36 +419,57 @@ const validateWorkFile = (file) => {
 
 
 // !--------------------------------------- Add work
+
 const addWork = () => {
+  console.log("inputTxtModal:", inputTxtModal);
   const formData = new FormData();
-  const inputTxt = document.getElementById("texte"); // Add this line to get the input element
-  formData.append("title", inputTxt.value);
-  formData.append("category", select.value);
+  formData.append("texte", inputTxtModal.value);
+  formData.append("categorie", select.value);
   formData.append("image", imgInput.files[0]);
 
   const token = localStorage.getItem("userToken");
 
-  fetch(`http://localhost:5678/api/works`, {
+  fetch("http://localhost:5678/api/works", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
     },
     body: formData,
   })
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         alert("Le travail a bien été ajouté");
         setDeleteModal();
+        createGallery(allWorks);
+        validateForm();
       }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de l'ajout du travail :", error);
     });
 };
 
+
+
 // !--------------------------------------- Validate form
+function validateForm() {
 
+  if (inputTxtModal.value !== "" && select.value !== "" && imgInput.files.length > 0) {
+    submitButton.style.background = "#1D6154";
+    submitButton.disabled = false;
+    submitButton.style.cursor = "pointer";
+  } else {
+    submitButton.disabled = true;
+    submitButton.style.background = "#A7A7A7";
+    submitButton.style.cursor = "auto";
+  }
+}
 
-// !--------------------------------------- Reset Form
-
+if (inputTxtModal !== null) {
+  inputTxtModal.addEventListener('input', validateForm);
+  select.addEventListener('input', validateForm);
+  imgInput.addEventListener('input', validateForm);
+}
 
 // !--------------------------------------- Log in
 const login = () => {

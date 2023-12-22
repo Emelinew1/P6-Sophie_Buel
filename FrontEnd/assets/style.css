@@ -389,7 +389,7 @@ body.modal-open {
     background-color: #B3B3B3;;
 }
 
-.modal button {
+.modal .add-btn {
     text-align: center;
     margin-top: 40px;
     border-radius: 60px;
@@ -450,7 +450,6 @@ body.modal-open {
 form {
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
     gap: 20px;
     font-family: Work Sans;
     font-size: 14px;
@@ -470,13 +469,14 @@ form input, select {
 
 #submit {
     align-self: center;
+    text-align: center;
     margin-top: 20px;
+    border-radius: 60px;
     border: none;
-    font-size: 14px;
+    width: 237px;
+    height: 36px;
+    font-family: 'Syne';
     color:white;
-    background-color: #A7A7A7;
-    font-family: Syne;
-    font-size: 14px;
     cursor: pointer;
 }
 

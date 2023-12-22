@@ -1,18 +1,12 @@
 "use strict";
 
 // !------------------------------------- Constants
-const portfolio = document.getElementById("portfolio");
 const filters = document.querySelector(".filters");
-const submitButton = document.getElementById("submit");
-const inputTxtModal = document.getElementById("texte");
-const select = document.getElementById("categorie");
-const imgInput = document.getElementById("image");
 
 // !-------------------------------------- Global variables
 let allWorks = [];
 let allCategories = [];
-
-
+let select; 
 // !--------------------------------------- API Functions
 
 /**
@@ -208,7 +202,12 @@ const setDeleteModal = () => {
   const line = document.createElement("div");
   const addImgBtn = document.createElement("button");
 
-  arrowLeft.classList.remove("fa-arrow-left");
+  allWorks.forEach((work) => {
+    const listItem = createGalleryItem(work);
+    modalList.appendChild(listItem);
+  });
+
+  document.body.classList.add("modal-open");
   modal.classList.add("modal");
   iconModal.classList.add("iconModal");
   iconClose.classList.add("fa-solid", "fa-xmark");
@@ -225,19 +224,11 @@ const setDeleteModal = () => {
   iconModal.appendChild(iconClose);
   modal.appendChild(titleModal);
   modal.appendChild(modalList);
-
-  allWorks.forEach((work) => {
-    const listItem = createGalleryItem(work);
-    modalList.appendChild(listItem);
-  });
-
   modal.appendChild(line);
   modal.appendChild(addImgBtn);
 
   iconClose.addEventListener("click", closeModal);
   addImgBtn.addEventListener("click", setCreateModal);
-
-  document.body.classList.add("modal-open");
 };
 
 /**
@@ -245,109 +236,99 @@ const setDeleteModal = () => {
  */
 const setCreateModal = () => {
 
-  const modal = document.createElement("section");
-  const iconModal = document.createElement("div");
-  const arrowLeft = document.createElement("i");
-  const iconClose = document.createElement("i");
-  const titleModal = document.createElement("h3");
+  const modal = document.querySelector(".modal");
+  const titleModal = document.querySelector(".modal h3");
+  const arrowLeft = document.querySelector(".iconModal:first-child");
+  const line  = document.querySelector(".line");
 
   const form = document.createElement("form");
   const addPhoto = document.createElement("div");
   const iconeImg = document.createElement("i");
-
   const labelImg = document.createElement("label");
-  labelImg.htmlFor = "image";
-
   const imgInput = document.createElement("input");
+  const btnPreview = document.createElement("input");
+  const detailsImg = document.createElement("p");
+  const titleImg = document.createElement("label");
+  const inputTxt = document.createElement("input");
+  const labelCat = document.createElement("label");
+  const select = document.createElement("select");
+  const submitButton = document.createElement("button");
+
+  const options = ["Appartements", "Objets", "Hôtels & restaurants"];
+  for (const optionText of options) {
+    const option = document.createElement("option");
+    option.value = options.indexOf(optionText);
+    option.textContent = optionText;
+    select.appendChild(option);
+  }
+
+  titleModal.nextSibling.remove();
+  line.nextElementSibling.remove();
+
+  document.body.classList.add("modal-open");
+  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
+  iconeImg.classList.add("fa-regular", "fa-image");
+  addPhoto.classList.add("add-photo");
+  btnPreview.classList.add("btn-preview");
+ 
+  titleModal.textContent = "Ajout photo";
+  detailsImg.textContent = "jpg, png : 4mo max";
+
+  labelImg.htmlFor = "image";
   imgInput.type = "file";
   imgInput.id = "image";
   imgInput.htmlFor = "image";
   imgInput.accept = ".jpg, .jpeg, .png";
   imgInput.style.display = "none";
-  const addButton = document.createElement("input");
-  addButton.type = "button";
-  addButton.value = "+ Ajouter photo";
 
-  const detailsImg = document.createElement("p");
+  btnPreview.type = "button";
+  btnPreview.value = "+ Ajouter photo";
 
-  const titleImg = document.createElement("label");
   titleImg.id = "label";
   titleImg.htmlFor = "texte";
   titleImg.textContent = "Titre";
-  const inputTxtModal = document.createElement("input");
-  inputTxtModal.type = "text";
-  inputTxtModal.id = "texte";
-  inputTxtModal.name = "texte";
+  inputTxt.type = "text";
+  inputTxt.id = "texte";
+  inputTxt.name = "texte";
 
-
-  const labelCat = document.createElement("label");
   labelCat.htmlFor = "categorie";
   labelCat.textContent = "Catégorie";
-  const select = document.createElement("select");
   select.id = "categorie";
   select.name = "categorie";
 
-  const options = ["Appartements", "Objets", "Hôtels & restaurants"];
-  for (const optionText of options) {
-    const option = document.createElement("option");
-    option.value = optionText.toLowerCase().replace(" ", "");
-    option.textContent = optionText;
-    select.appendChild(option);
-  }
-  const line = document.createElement("div");
-
-  const submitButton = document.createElement("button");
   submitButton.type = "submit";
   submitButton.textContent = "Valider";
   submitButton.id = "submit";
 
-  titleModal.textContent = "Ajout photo";
-  detailsImg.textContent = "jpg, png : 4mo max";
-  document.body.classList.add("modal-open");
-  modal.classList.add("modal");
-  iconModal.classList.add("iconModal");
-  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
-  iconClose.classList.add("fa-solid", "fa-xmark");
-  iconeImg.classList.add("fa-regular", "fa-image");
-  addPhoto.classList.add("add-photo");
-  addButton.classList.add("img-input");
-  line.classList.add("line");
-
-  portfolio.appendChild(modal);
-  modal.appendChild(iconModal);
-  iconModal.appendChild(arrowLeft);
-  iconModal.appendChild(iconClose);
-  modal.appendChild(titleModal);
   modal.appendChild(form);
   form.appendChild(addPhoto);
   addPhoto.appendChild(iconeImg);
   addPhoto.appendChild(labelImg);
   addPhoto.appendChild(imgInput);
-  addPhoto.appendChild(addButton);
+  addPhoto.appendChild(btnPreview);
   addPhoto.appendChild(detailsImg);
   form.appendChild(titleImg);
-  form.appendChild(inputTxtModal);
+  form.appendChild(inputTxt);
   form.appendChild(labelCat);
   form.appendChild(select);
   form.appendChild(line);
   form.appendChild(submitButton);
 
-  arrowLeft.addEventListener("click", setDeleteModal);
-  iconClose.addEventListener("click", closeModal);
-
-  addButton.addEventListener("click", () => {
+  arrowLeft.addEventListener("click",setDeleteModal);
+  imgInput.addEventListener("change", workPreview);
+  btnPreview.addEventListener("click", () => {
     imgInput.click();
   });
-  imgInput.addEventListener("change", workPreview);
+ 
+  inputTxt.addEventListener('input', validateForm);
+  select.addEventListener('input', validateForm);
+  imgInput.addEventListener('input', validateForm);
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    addWork();
+    addWork(inputTxt);
   });
-
-  document.body.classList.add("modal-open");;
-};
-
-
+}
 // !--------------------------------------- Close modal
 const closeModal = () => {
   const modal = document.querySelector(".modal");
@@ -420,10 +401,10 @@ const validateWorkFile = (file) => {
 
 // !--------------------------------------- Add work
 
-const addWork = () => {
-  console.log("inputTxtModal:", inputTxtModal);
+const addWork = (inputTxt) => {
+  console.log("inputTxt:", inputTxt);
   const formData = new FormData();
-  formData.append("texte", inputTxtModal.value);
+  formData.append("texte", inputTxt.value);
   formData.append("categorie", select.value);
   formData.append("image", imgInput.files[0]);
 
@@ -441,7 +422,6 @@ const addWork = () => {
         alert("Le travail a bien été ajouté");
         setDeleteModal();
         createGallery(allWorks);
-        validateForm();
       }
     })
     .catch((error) => {
@@ -454,7 +434,7 @@ const addWork = () => {
 // !--------------------------------------- Validate form
 function validateForm() {
 
-  if (inputTxtModal.value !== "" && select.value !== "" && imgInput.files.length > 0) {
+  if (inputTxt.value !== "" && select.value !== "option" && imgInput.files.length > 0) {
     submitButton.style.background = "#1D6154";
     submitButton.disabled = false;
     submitButton.style.cursor = "pointer";
@@ -465,11 +445,6 @@ function validateForm() {
   }
 }
 
-if (inputTxtModal !== null) {
-  inputTxtModal.addEventListener('input', validateForm);
-  select.addEventListener('input', validateForm);
-  imgInput.addEventListener('input', validateForm);
-}
 
 // !--------------------------------------- Log in
 const login = () => {

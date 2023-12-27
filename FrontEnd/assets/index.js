@@ -6,7 +6,10 @@ const filters = document.querySelector(".filters");
 // !-------------------------------------- Global variables
 let allWorks = [];
 let allCategories = [];
-let select; 
+let select;
+let inputTxt;
+let imgInput;
+let submitButton;
 // !--------------------------------------- API Functions
 
 /**
@@ -245,14 +248,16 @@ const setCreateModal = () => {
   const addPhoto = document.createElement("div");
   const iconeImg = document.createElement("i");
   const labelImg = document.createElement("label");
-  const imgInput = document.createElement("input");
   const btnPreview = document.createElement("input");
   const detailsImg = document.createElement("p");
   const titleImg = document.createElement("label");
-  const inputTxt = document.createElement("input");
   const labelCat = document.createElement("label");
-  const select = document.createElement("select");
-  const submitButton = document.createElement("button");
+  
+  imgInput = document.createElement("input");
+  inputTxt = document.createElement("input");
+  select = document.createElement("select");
+  submitButton = document.createElement("button");
+
 
   const options = ["Appartements", "Objets", "Hôtels & restaurants"];
   for (const optionText of options) {
@@ -401,7 +406,7 @@ const validateWorkFile = (file) => {
 
 // !--------------------------------------- Add work
 
-const addWork = (inputTxt) => {
+const addWork = (inputTxt, select, imgInput) => {
   console.log("inputTxt:", inputTxt);
   const formData = new FormData();
   formData.append("texte", inputTxt.value);
@@ -433,8 +438,8 @@ const addWork = (inputTxt) => {
 
 // !--------------------------------------- Validate form
 function validateForm() {
-
-  if (inputTxt.value !== "" && select.value !== "option" && imgInput.files.length > 0) {
+  // Assurez-vous que inputTxt est défini avant d'essayer d'accéder à sa propriété value
+  if (inputTxt && inputTxt.value !== "" && select.value !== "option" && imgInput.files.length > 0) {
     submitButton.style.background = "#1D6154";
     submitButton.disabled = false;
     submitButton.style.cursor = "pointer";

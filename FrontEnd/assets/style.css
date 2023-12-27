@@ -354,6 +354,7 @@ body.modal-open {
 
 .modal li {
     width: calc((100% - 60px) / 5);
+    position: relative;
 }
 
 .modal figure {
@@ -367,6 +368,7 @@ body.modal-open {
     width: 78px;
     height: 104px;
 }
+
 
 .fa-trash-can {
     position: absolute;

@@ -41,19 +41,15 @@ const getCategories = async () => {
  * @return {HTMLLIElement} The gallery item element.
  */
 const createGalleryItem = (work) => {
+  // Création des éléments DOM
   const listItem = document.createElement("li");
   const figure = document.createElement("figure");
   const img = document.createElement("img");
-  const deleteIcon = document.createElement("i");
 
-  img.src = work.imageUrl;
-  deleteIcon.classList.add("fa-solid", "fa-trash-can");
-  deleteIcon.addEventListener("click", () => {
-    deleteWork(work.id);
-  });
+  img.src = work.imageUrl; 
+  img.alt = work.title;   
 
   figure.appendChild(img);
-  figure.appendChild(deleteIcon);
   listItem.appendChild(figure);
 
   return listItem;
@@ -207,9 +203,19 @@ const setDeleteModal = () => {
 
   allWorks.forEach((work) => {
     const listItem = createGalleryItem(work);
+    const deleteIcon = document.createElement("i");
+    deleteIcon.classList.add("fa-solid", "fa-trash-can");
+    deleteIcon.addEventListener("click", () => {
+      deleteWork(work.id);
+      listItem.remove();
+      allWorks = allWorks.filter(item => item.id !== work.id);
+    });
+
+    listItem.appendChild(deleteIcon);
     modalList.appendChild(listItem);
   });
 
+  
   document.body.classList.add("modal-open");
   modal.classList.add("modal");
   iconModal.classList.add("iconModal");
@@ -217,12 +223,13 @@ const setDeleteModal = () => {
   addImgBtn.classList.add("add-btn");
   line.classList.add("line");
 
+
   titleModal.textContent = "Galerie Photo";
   addImgBtn.textContent = "Ajouter une photo";
 
+
   portfolio.appendChild(modal);
   modal.appendChild(iconModal);
-
   iconModal.appendChild(arrowLeft);
   iconModal.appendChild(iconClose);
   modal.appendChild(titleModal);
@@ -233,6 +240,7 @@ const setDeleteModal = () => {
   iconClose.addEventListener("click", closeModal);
   addImgBtn.addEventListener("click", setCreateModal);
 };
+
 
 /**
  * Sets up the create modal by creating and appending the necessary elements.
@@ -406,15 +414,16 @@ const validateWorkFile = (file) => {
 
 // !--------------------------------------- Add work
 
-const addWork = (inputTxt, select, imgInput) => {
-  console.log("inputTxt:", inputTxt);
+const addWork = () => {
+  console.log("Before fetch call");
+  
   const formData = new FormData();
   formData.append("texte", inputTxt.value);
   formData.append("categorie", select.value);
   formData.append("image", imgInput.files[0]);
 
   const token = localStorage.getItem("userToken");
-
+  
   fetch("http://localhost:5678/api/works", {
     method: "POST",
     headers: {
@@ -423,6 +432,7 @@ const addWork = (inputTxt, select, imgInput) => {
     body: formData,
   })
     .then((res) => {
+      console.log("Inside fetch callback");
       if (res.ok) {
         alert("Le travail a bien été ajouté");
         setDeleteModal();

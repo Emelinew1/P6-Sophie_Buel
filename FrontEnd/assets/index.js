@@ -45,12 +45,17 @@ const createGalleryItem = (work) => {
   const listItem = document.createElement("li");
   const figure = document.createElement("figure");
   const img = document.createElement("img");
+  const figcaption = document.createElement("figcaption");
 
   img.src = work.imageUrl; 
-  img.alt = work.title;   
+  img.alt = work.title;
+  figcaption.textContent = work.title; 
+  
+  figcaption.classList.add("figcaption");
 
   figure.appendChild(img);
   listItem.appendChild(figure);
+  figure.appendChild(figcaption);
 
   return listItem;
 };
@@ -219,6 +224,8 @@ const setDeleteModal = () => {
 
     listItem.appendChild(deleteIcon);
     modalList.appendChild(listItem);
+
+    
   });
 
   

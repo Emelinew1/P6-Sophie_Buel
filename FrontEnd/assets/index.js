@@ -192,6 +192,7 @@ const addModifyBtn = () => {
  * 
  */
 const setDeleteModal = () => {
+  const existingModal = document.querySelector(".modal");
   const modal = document.createElement("section");
   const iconModal = document.createElement("div");
   const arrowLeft = document.createElement("i");
@@ -209,7 +210,12 @@ const setDeleteModal = () => {
       deleteWork(work.id);
       listItem.remove();
       allWorks = allWorks.filter(item => item.id !== work.id);
+      createGallery(allWorks); 
     });
+
+    if (existingModal) {
+      existingModal.remove();
+    }
 
     listItem.appendChild(deleteIcon);
     modalList.appendChild(listItem);
@@ -239,9 +245,8 @@ const setDeleteModal = () => {
 
   iconClose.addEventListener("click", closeModal);
   addImgBtn.addEventListener("click", setCreateModal);
+
 };
-
-
 /**
  * Sets up the create modal by creating and appending the necessary elements.
  */
@@ -250,6 +255,7 @@ const setCreateModal = () => {
   const modal = document.querySelector(".modal");
   const titleModal = document.querySelector(".modal h3");
   const arrowLeft = document.querySelector(".iconModal:first-child");
+  const iconClose = document.querySelector(".iconModal i.fa-solid.fa-xmark");
   const line  = document.querySelector(".line");
 
   const form = document.createElement("form");
@@ -327,7 +333,9 @@ const setCreateModal = () => {
   form.appendChild(line);
   form.appendChild(submitButton);
 
-  arrowLeft.addEventListener("click",setDeleteModal);
+  arrowLeft.addEventListener("click",setDeleteModal); 
+  iconClose.addEventListener("click", closeModal);
+
   imgInput.addEventListener("change", workPreview);
   btnPreview.addEventListener("click", () => {
     imgInput.click();
@@ -339,7 +347,7 @@ const setCreateModal = () => {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    addWork(inputTxt);
+    addWork(inputTxt, select, imgInput);
   });
 }
 // !--------------------------------------- Close modal
@@ -414,16 +422,15 @@ const validateWorkFile = (file) => {
 
 // !--------------------------------------- Add work
 
-const addWork = () => {
-  console.log("Before fetch call");
-  
+const addWork = (inputTxt, select, imgInput) => {
+ 
   const formData = new FormData();
   formData.append("texte", inputTxt.value);
   formData.append("categorie", select.value);
   formData.append("image", imgInput.files[0]);
 
   const token = localStorage.getItem("userToken");
-  
+
   fetch("http://localhost:5678/api/works", {
     method: "POST",
     headers: {
@@ -432,7 +439,6 @@ const addWork = () => {
     body: formData,
   })
     .then((res) => {
-      console.log("Inside fetch callback");
       if (res.ok) {
         alert("Le travail a bien été ajouté");
         setDeleteModal();
@@ -443,7 +449,6 @@ const addWork = () => {
       console.error("Erreur lors de l'ajout du travail :", error);
     });
 };
-
 
 
 // !--------------------------------------- Validate form

@@ -423,10 +423,9 @@ const validateWorkFile = (file) => {
 // !--------------------------------------- Add work
 
 const addWork = (inputTxt, select, imgInput) => {
- 
   const formData = new FormData();
-  formData.append("texte", inputTxt.value);
-  formData.append("categorie", select.value);
+  formData.append("title", inputTxt.value);
+  formData.append("category", select.value);
   formData.append("image", imgInput.files[0]);
 
   const token = localStorage.getItem("userToken");
@@ -438,11 +437,14 @@ const addWork = (inputTxt, select, imgInput) => {
     },
     body: formData,
   })
-    .then((res) => {
+    .then(async (res) => {
       if (res.ok) {
         alert("Le travail a bien été ajouté");
-        setDeleteModal();
+
+        const newWorkResponse = await res.json();
+        allWorks.push(newWorkResponse);
         createGallery(allWorks);
+        setDeleteModal();
       }
     })
     .catch((error) => {

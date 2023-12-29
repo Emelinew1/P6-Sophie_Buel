@@ -55,7 +55,7 @@ const createGalleryItem = (work) => {
 
   figure.appendChild(img);
   listItem.appendChild(figure);
-  figure.appendChild(figcaption);
+  listItem.appendChild(figcaption);
 
   return listItem;
 };
@@ -114,7 +114,6 @@ const createFilters = () => {
       const categoryId = target.id.toLowerCase();
       filterCategory(categoryId);
 
-      // Remove active class from all filters and add to the clicked one
       filters.querySelectorAll("li").forEach(li => li.classList.remove("active"));
       target.classList.add("active");
     }
@@ -190,6 +189,13 @@ const addModifyBtn = () => {
   modifyBtn.addEventListener("click", setDeleteModal);
 };
 
+// !--------------------------------------- Close modal
+const closeModal = () => {
+  const modal = document.querySelector(".modal");
+  modal.remove();
+  document.body.classList.remove("modal-open");
+};
+
 // !--------------------------------------- Modal Functions
 
 /**
@@ -207,8 +213,12 @@ const setDeleteModal = () => {
   const line = document.createElement("div");
   const addImgBtn = document.createElement("button");
 
+
   allWorks.forEach((work) => {
     const listItem = createGalleryItem(work);
+    const figcaption = listItem.querySelector("figcaption");
+    listItem.removeChild(figcaption);
+
     const deleteIcon = document.createElement("i");
     deleteIcon.classList.add("fa-solid", "fa-trash-can");
     deleteIcon.addEventListener("click", () => {
@@ -220,13 +230,13 @@ const setDeleteModal = () => {
 
     if (existingModal) {
       existingModal.remove();
+
     }
-
-    listItem.appendChild(deleteIcon);
-    modalList.appendChild(listItem);
-
+      listItem.appendChild(deleteIcon);
+      modalList.appendChild(listItem);
     
   });
+
 
   
   document.body.classList.add("modal-open");
@@ -340,8 +350,8 @@ const setCreateModal = () => {
   form.appendChild(line);
   form.appendChild(submitButton);
 
-  arrowLeft.addEventListener("click",setDeleteModal); 
   iconClose.addEventListener("click", closeModal);
+  arrowLeft.addEventListener("click", setDeleteModal);
 
   imgInput.addEventListener("change", workPreview);
   btnPreview.addEventListener("click", () => {
@@ -357,12 +367,7 @@ const setCreateModal = () => {
     addWork(inputTxt, select, imgInput);
   });
 }
-// !--------------------------------------- Close modal
-const closeModal = () => {
-  const modal = document.querySelector(".modal");
-  modal.remove();
-  document.body.classList.remove("modal-open");
-};
+
 
 // !--------------------------------------- Delete work
 const deleteWork = async (Id) => {

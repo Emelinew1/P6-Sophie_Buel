@@ -41,11 +41,11 @@ const getCategories = async () => {
  * @return {HTMLLIElement} The gallery item element.
  */
 const createGalleryItem = (work) => {
-  // Création des éléments DOM
-  const listItem = document.createElement("li");
-  const figure = document.createElement("figure");
-  const img = document.createElement("img");
-  const figcaption = document.createElement("figcaption");
+
+  const listItem    = document.createElement("li");
+  const figure      = document.createElement("figure");
+  const img         = document.createElement("img");
+  const figcaption  = document.createElement("figcaption");
 
   img.src = work.imageUrl; 
   img.alt = work.title;
@@ -203,15 +203,15 @@ const closeModal = () => {
  * 
  */
 const setDeleteModal = () => {
-  const existingModal = document.querySelector(".modal");
-  const modal = document.createElement("section");
-  const iconModal = document.createElement("div");
-  const arrowLeft = document.createElement("i");
-  const iconClose = document.createElement("i");
-  const modalList = document.createElement("ul");
-  const titleModal = document.createElement("h3");
-  const line = document.createElement("div");
-  const addImgBtn = document.createElement("button");
+  const existingModal     = document.querySelector(".modal");
+  const modal             = document.createElement("section");
+  const iconModal         = document.createElement("div");
+  const arrowLeft         = document.createElement("i");
+  const iconClose         = document.createElement("i");
+  const modalList         = document.createElement("ul");
+  const titleModal        = document.createElement("h3");
+  const line              = document.createElement("div");
+  const addImgBtn         = document.createElement("button");
 
 
   allWorks.forEach((work) => {
@@ -225,7 +225,7 @@ const setDeleteModal = () => {
       deleteWork(work.id);
       listItem.remove();
       allWorks = allWorks.filter(item => item.id !== work.id);
-      createGallery(allWorks); 
+      createGallery(allWorks);
     });
 
     if (existingModal) {
@@ -246,8 +246,8 @@ const setDeleteModal = () => {
   addImgBtn.classList.add("add-btn");
   line.classList.add("line");
 
-  titleModal.textContent = "Galerie Photo";
-  addImgBtn.textContent = "Ajouter une photo";
+  titleModal.textContent  = "Galerie Photo";
+  addImgBtn.textContent   = "Ajouter une photo";
 
   portfolio.appendChild(modal);
   modal.appendChild(iconModal);
@@ -268,23 +268,23 @@ const setDeleteModal = () => {
  */
 const setCreateModal = () => {
 
-  const modal = document.querySelector(".modal");
-  const titleModal = document.querySelector(".modal h3"); 
-  const line  = document.querySelector(".line");
+  const modal       = document.querySelector(".modal");
+  const titleModal  = document.querySelector(".modal h3"); 
+  const line        = document.querySelector(".line");
 
-  const form = document.createElement("form");
-  const addPhoto = document.createElement("div");
-  const iconeImg = document.createElement("i");
-  const labelImg = document.createElement("label");
-  const btnPreview = document.createElement("input");
-  const detailsImg = document.createElement("p");
-  const titleImg = document.createElement("label");
-  const labelCat = document.createElement("label");
+  const form        = document.createElement("form");
+  const addPhoto    = document.createElement("div");
+  const iconeImg    = document.createElement("i");
+  const labelImg    = document.createElement("label");
+  const btnPreview  = document.createElement("input");
+  const detailsImg  = document.createElement("p");
+  const titleImg    = document.createElement("label");
+  const labelCat    = document.createElement("label");
   
-  imgInput = document.createElement("input");
-  inputTxt = document.createElement("input");
-  select = document.createElement("select");
-  submitButton = document.createElement("button");
+  imgInput          = document.createElement("input");
+  inputTxt          = document.createElement("input");
+  select            = document.createElement("select");
+  submitButton      = document.createElement("button");
 
 
   const options = ["Appartements", "Objets", "Hôtels & restaurants"];
@@ -304,34 +304,34 @@ const setCreateModal = () => {
   addPhoto.classList.add("add-photo");
   btnPreview.classList.add("btn-preview");
  
-  titleModal.textContent = "Ajout photo";
-  detailsImg.textContent = "jpg, png : 4mo max";
+  titleModal.textContent    = "Ajout photo";
+  detailsImg.textContent    = "jpg, png : 4mo max";
 
-  labelImg.htmlFor = "image";
-  imgInput.type = "file";
-  imgInput.id = "image";
-  imgInput.htmlFor = "image";
-  imgInput.accept = ".jpg, .jpeg, .png";
-  imgInput.style.display = "none";
+  labelImg.htmlFor          = "image";
+  imgInput.type             = "file";
+  imgInput.id               = "image";
+  imgInput.htmlFor          = "image";
+  imgInput.accept           = ".jpg, .jpeg, .png";
+  imgInput.style.display    = "none";
 
-  btnPreview.type = "button";
-  btnPreview.value = "+ Ajouter photo";
+  btnPreview.type           = "button";
+  btnPreview.value          = "+ Ajouter photo";
 
-  titleImg.id = "label";
-  titleImg.htmlFor = "texte";
-  titleImg.textContent = "Titre";
-  inputTxt.type = "text";
-  inputTxt.id = "texte";
-  inputTxt.name = "texte";
+  titleImg.id               = "label";
+  titleImg.htmlFor          = "texte";
+  titleImg.textContent      = "Titre";
+  inputTxt.type             = "text";
+  inputTxt.id               = "texte";
+  inputTxt.name             = "texte";
 
-  labelCat.htmlFor = "categorie";
-  labelCat.textContent = "Catégorie";
-  select.id = "categorie";
-  select.name = "categorie";
+  labelCat.htmlFor          = "categorie";
+  labelCat.textContent      = "Catégorie";
+  select.id                 = "categorie";
+  select.name               = "categorie";
 
-  submitButton.type = "submit";
-  submitButton.textContent = "Valider";
-  submitButton.id = "submit";
+  submitButton.type         = "submit";
+  submitButton.textContent  = "Valider";
+  submitButton.id           = "submit";
 
   modal.appendChild(form);
   form.appendChild(addPhoto);
@@ -376,7 +376,7 @@ const deleteWork = async (Id) => {
 
     if (response.ok) {
       alert("Le travail a bien été supprimé");
-      setDeleteModal();
+      createGallery(allWorks);
     } else {
       const errorMessage = "Une erreur est survenue lors de la suppression du travail.";
       console.error(errorMessage);
@@ -402,6 +402,11 @@ function displayPreview(file) {
   reader.readAsDataURL(file);
 }
 
+/**
+ * Generates a preview of a work based on the selected file.
+ *
+ * @param {Event} event - The event object triggered by the user action.
+ */
 function workPreview(event) {
   const fileInput = event.target;
   const file = fileInput.files[0];
@@ -417,13 +422,18 @@ function workPreview(event) {
   }
 }
 
+/**
+ * Validates if a given file is a valid work file.
+ *
+ * @param {Object} file - The file object to be validated.
+ * @return {boolean} Returns true if the file is a valid work file, otherwise returns false.
+ */
 const validateWorkFile = (file) => {
   const allowedTypes = new Set(["image/jpeg", "image/jpg", "image/png"]);
   const maxFileSize = 4 * 1024 * 1024;
 
   return allowedTypes.has(file.type) && file.size <= maxFileSize;
 };
-
 
 // !--------------------------------------- Add work
 
@@ -449,7 +459,6 @@ const addWork = (inputTxt, select, imgInput) => {
         const newWorkResponse = await res.json();
         allWorks.push(newWorkResponse);
         createGallery(allWorks);
-        setDeleteModal();
       }
     })
     .catch((error) => {

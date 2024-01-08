@@ -377,6 +377,7 @@ const deleteWork = async (Id) => {
     if (response.ok) {
       alert("Le travail a bien été supprimé");
       createGallery(allWorks);
+      setDeleteModal();
     } else {
       const errorMessage = "Une erreur est survenue lors de la suppression du travail.";
       console.error(errorMessage);
@@ -459,6 +460,7 @@ const addWork = (inputTxt, select, imgInput) => {
         const newWorkResponse = await res.json();
         allWorks.push(newWorkResponse);
         createGallery(allWorks);
+        setDeleteModal();
       }
     })
     .catch((error) => {
